@@ -1,0 +1,48 @@
+﻿@model ServiceApresVenteApp.Controllers.ComplaintCreateViewModel
+@{
+    ViewData["Title"] = "Create Complaint";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container">
+    <h2>Create Complaint</h2>
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+    }
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <div class="alert alert-danger">
+            <ul>
+                @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    <li>@error.ErrorMessage</li>
+                }
+            </ul>
+        </div>
+    }
+    @if (!Model.AvailableArticles.Any())
+    {
+        <div class="alert alert-warning">
+            No articles available. Please contact an administrator to add articles.
+        </div>
+    }
+    <form asp-action="Create" method="post">
+        <div class="mb-3">
+            <label asp-for="ComplaintDescription" class="form-label">Complaint Description</label>
+            <textarea asp-for="ComplaintDescription" name="ComplaintDescription" class="form-control" rows="5" required>@Model?.ComplaintDescription</textarea>
+            <span asp-validation-for="ComplaintDescription" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="SelectedArticleId" class="form-label">Select Article</label>
+            <select asp-for="SelectedArticleId" name="SelectedArticleId" class="form-control" required>
+                <option value="">-- Select an article --</option>
+                @foreach (var article in Model.AvailableArticles)
+                {
+                    <option value="@article.Id" @(Model.SelectedArticleId == article.Id ? "selected" : "")>@article.Name (Warranty: @article.WarrantyMonths months)</option>
+                }
+            </select>
+            <span asp-validation-for="SelectedArticleId" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn btn-primary" @(Model.AvailableArticles.Any() ? "" : "disabled")>Submit Complaint</button>
+    </form>
+</div>

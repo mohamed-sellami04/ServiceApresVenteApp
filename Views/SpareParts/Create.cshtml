@@ -1,0 +1,53 @@
+﻿@model ServiceApresVenteApp.Models.SparePart
+@{
+    ViewData["Title"] = "Create Spare Part";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container">
+    <h2>Create Spare Part</h2>
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+    }
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <div class="alert alert-danger">
+            <ul>
+                @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    <li>@error.ErrorMessage</li>
+                }
+            </ul>
+        </div>
+    }
+    <form asp-action="Create" method="post">
+        <div class="mb-3">
+            <label asp-for="Name" class="form-label">Name</label>
+            <input asp-for="Name" name="Name" class="form-control" value="@Model?.Name" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Description" class="form-label">Description</label>
+            <textarea asp-for="Description" name="Description" class="form-control" rows="3">@Model?.Description</textarea>
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="InterventionId" class="form-label">Intervention</label>
+            <select asp-for="InterventionId" name="InterventionId" class="form-control">
+                <option value="">-- Select an intervention --</option>
+                @foreach (var intervention in ViewBag.Interventions)
+                {
+                    <option value="@intervention.Id" @(Model?.InterventionId == intervention.Id ? "selected" : "")>@intervention.Display</option>
+                }
+            </select>
+            <span asp-validation-for="InterventionId" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Price" class="form-label">Price</label>
+            <input asp-for="Price" name="Price" class="form-control" type="number" step="0.01" min="0" value="@(Model?.Price ?? 0)" />
+            <span asp-validation-for="Price" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn btn-primary">Create</button>
+        <a href="@Url.Action("Index", "SpareParts")" class="btn btn-secondary ms-2">Cancel</a>
+    </form>
+</div>

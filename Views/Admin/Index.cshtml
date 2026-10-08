@@ -1,0 +1,50 @@
+﻿@model List<ServiceApresVenteApp.Controllers.ComplaintViewModel>
+@{
+    ViewData["Title"] = "Admin - Complaints";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container">
+    <h2>Complaints</h2>
+    
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+    }
+    
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+    }
+    
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Description</th>
+                <th>Client</th>
+                <th>Article</th>
+                <th>Submission Date</th>
+                <th>Purchase Date</th>
+                <th>Warranty Months</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var complaint in Model)
+            {
+                <tr>
+                    <td>@complaint.Id</td>
+                    <td>@complaint.Description</td>
+                    <td>@complaint.ClientName</td>
+                    <td>@complaint.ArticleName</td>
+                    <td>@complaint.SubmissionDate.ToShortDateString()</td>
+                    <td>@(complaint.PurchaseDate.ToShortDateString() ?? "N/A")</td>
+                    <td>@complaint.WarrantyMonths</td>
+                    <td>
+                        <a href="@Url.Action("Delete", "Admin", new { id = complaint.Id })" class="btn btn-sm btn-danger">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

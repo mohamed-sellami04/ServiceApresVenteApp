@@ -1,0 +1,38 @@
+﻿@model List<ServiceApresVenteApp.Models.SparePart>
+@{
+    ViewData["Title"] = "Manage Spare Parts";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container">
+    <h2>Spare Parts</h2>
+    <a href="@Url.Action("Create", "SpareParts")" class="btn btn-primary mb-3">Create New Spare Part</a>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Price</th>
+                <th>Intervention ID</th>
+                <th>Complaint ID</th>
+                <th>Client</th>
+                <th>Article</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var sparePart in Model)
+            {
+                <tr>
+                    <td>@sparePart.Id</td>
+                    <td>@sparePart.Name</td>
+                    <td>@sparePart.Description</td>
+                    <td>@sparePart.Price.ToString("C")</td>
+                    <td>@sparePart.InterventionId</td>
+                    <td>@(sparePart.Intervention?.ComplaintId ?? 0)</td>
+                    <td>@(sparePart.Intervention?.Complaint?.Client?.Name ?? "N/A")</td>
+                    <td>@(sparePart.Intervention?.Complaint?.Article?.Name ?? "N/A")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

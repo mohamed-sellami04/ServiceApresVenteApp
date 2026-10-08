@@ -1,0 +1,58 @@
+﻿@model IEnumerable<ServiceApresVenteApp.Models.Article>
+@{
+    ViewData["Title"] = "Articles";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container">
+    <h2>Articles</h2>
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+    }
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+    }
+    <a href="@Url.Action("Create", "Articles")" class="btn btn-primary mb-3">Create New Article</a>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Warranty (Months)</th>
+                <th>Price</th>
+                <th>Purchase Date</th>
+                <th>Warranty Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var article in Model)
+            {
+                <tr>
+                    <td>@article.Id</td>
+                    <td>@article.Name</td>
+                    <td>@article.Description</td>
+                    <td>@article.WarrantyMonths</td>
+                    <td>@article.Price.ToString("C")</td>
+                    <td>@article.PurchaseDate.ToShortDateString()</td>
+                    <td>
+                        @if (article.IsUnderWarranty())
+                        {
+                            <span class="badge bg-success">Under Warranty</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger">Out of Warranty</span>
+                        }
+                    </td>
+                    <td>
+                        <a href="@Url.Action("Edit", "Articles", new { id = article.Id })" class="btn btn-sm btn-primary">Edit</a>
+                        <a href="@Url.Action("Delete", "Articles", new { id = article.Id })" class="btn btn-sm btn-danger">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

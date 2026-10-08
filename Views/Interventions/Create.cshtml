@@ -1,0 +1,80 @@
+﻿@model ServiceApresVenteApp.Models.Intervention
+@{
+    ViewData["Title"] = "Create Intervention";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container">
+    <h2>Create Intervention</h2>
+    
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+    
+    <form asp-action="Create" method="post">
+        <div class="mb-3">
+            <label asp-for="Description" class="form-label">Description</label>
+            <textarea asp-for="Description" name="Description" class="form-control" rows="5">@Model?.Description</textarea>
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="InterventionDate" class="form-label">Intervention Date</label>
+            <input asp-for="InterventionDate" name="InterventionDate" class="form-control" type="date" value="@(Model?.InterventionDate.ToString("yyyy-MM-dd") ?? DateTime.Now.ToString("yyyy-MM-dd"))" />
+            <span asp-validation-for="InterventionDate" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="ComplaintId" class="form-label">Complaint</label>
+            <select asp-for="ComplaintId" name="ComplaintId" class="form-control" id="complaintSelect">
+                <option value="">-- Select a complaint --</option>
+                @foreach (var complaint in ViewBag.Complaints)
+                {
+                    <option value="@complaint.Id" 
+                            data-warranty="@complaint.IsUnderWarranty.ToString().ToLower()" 
+                            @(Model?.ComplaintId == complaint.Id ? "selected" : "")>
+                        @complaint.Display @(complaint.IsUnderWarranty ? "(Under Warranty)" : "(Out of Warranty)")
+                    </option>
+                }
+            </select>
+            <span asp-validation-for="ComplaintId" class="text-danger"></span>
+        </div>
+        <div class="mb-3" id="laborCostDiv">
+            <label asp-for="LaborCost" class="form-label">Labor Cost</label>
+            <input asp-for="LaborCost" name="LaborCost" class="form-control" type="number" step="0.01" min="0" value="@(Model?.LaborCost ?? 0)" />
+            <span asp-validation-for="LaborCost" class="text-danger"></span>
+            <div class="form-text" id="warrantyMessage"></div>
+        </div>
+        <button type="submit" class="btn btn-primary">Create</button>
+        <a href="@Url.Action("Index", "Interventions")" class="btn btn-secondary ms-2">Cancel</a>
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            function updateWarrantyMessage() {
+                var selectedOption = $("#complaintSelect option:selected");
+                var isUnderWarranty = selectedOption.data("warranty") === true;
+                
+                if (selectedOption.val()) {
+                    if (isUnderWarranty) {
+                        $("#warrantyMessage").text("This item is under warranty. The intervention will be free.");
+                        $("#warrantyMessage").removeClass("text-danger").addClass("text-success");
+                        $("#laborCostDiv").hide();
+                    } else {
+                        $("#warrantyMessage").text("This item is out of warranty. Labor and parts will be charged.");
+                        $("#warrantyMessage").removeClass("text-success").addClass("text-danger");
+                        $("#laborCostDiv").show();
+                    }
+                } else {
+                    $("#warrantyMessage").text("");
+                    $("#laborCostDiv").show();
+                }
+            }
+            
+            $("#complaintSelect").change(updateWarrantyMessage);
+            updateWarrantyMessage(); // Run on page load
+        });
+    </script>
+}

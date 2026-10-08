@@ -1,0 +1,13 @@
+@{
+    ViewData["Title"] = "Error";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="alert alert-danger">
+        <h2>Error</h2>
+        <p>@ViewBag.ErrorMessage</p>
+    </div>
+    <a href="javascript:history.back()" class="btn btn-primary">Go Back</a>
+    <a href="@Url.Action("Index", "Home")" class="btn btn-secondary">Go to Home</a>
+</div>

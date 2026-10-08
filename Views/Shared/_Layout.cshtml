@@ -1,0 +1,71 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - ServiceApresVenteApp</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">After-Sale Services</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    @if (Context.Session.GetString("UserRole") == "Client")
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" href="@Url.Action("Create", "Complaints")">Create Complaint</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="@Url.Action("ClientComplaints", "Complaints")">My Complaints</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="@Url.Action("ClientInterventions", "Interventions")">My Interventions</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="@Url.Action("ClientSpareParts", "SpareParts")">Spare Parts Used</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="@Url.Action("Logout", "Clients")">Logout</a>
+                        </li>
+                    }
+                    else if (Context.Session.GetString("UserRole") == "Admin")
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" href="@Url.Action("Index", "Admin")">View Complaints</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="@Url.Action("Index", "Articles")">Manage Articles</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="@Url.Action("Index", "Interventions")">Manage Interventions</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="@Url.Action("Index", "SpareParts")">Manage Spare Parts</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="@Url.Action("Logout", "Clients")">Logout</a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container mt-4">
+        @RenderBody()
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    @RenderSection("Scripts", required: false)
+    <script>
+        // Disable client-side validation for debugging
+        $.validator.setDefaults({
+            debug: true,
+            success: "valid"
+        });
+    </script>
+</body>
+</html>

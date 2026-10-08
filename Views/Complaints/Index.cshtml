@@ -1,0 +1,35 @@
+﻿@model List<ServiceApresVenteApp.Models.Complaint>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Complaints</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h2>Complaints</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Description</th>
+                    <th>Submission Date</th>
+                    <th>Article</th>
+                    <th>Client</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var complaint in Model)
+                {
+                    <tr>
+                        <td>@complaint.Description</td>
+                        <td>@complaint.SubmissionDate.ToShortDateString()</td>
+                        <td>@complaint.Article.Name</td>
+                        <td>@complaint.Client.Name</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <a asp-action="Create" class="btn btn-primary">New Complaint</a>
+    </div>
+</body>
+</html>

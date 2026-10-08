@@ -1,0 +1,39 @@
+﻿@model List<ServiceApresVenteApp.Models.Intervention>
+@{
+    ViewData["Title"] = "Manage Interventions";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container">
+    <h2>Interventions</h2>
+    <a href="@Url.Action("Create", "Interventions")" class="btn btn-primary mb-3">Create New Intervention</a>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Description</th>
+                <th>Intervention Date</th>
+                <th>Complaint ID</th>
+                <th>Client</th>
+                <th>Article</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var intervention in Model)
+            {
+                <tr>
+                    <td>@intervention.Id</td>
+                    <td>@intervention.Description</td>
+                    <td>@intervention.InterventionDate.ToShortDateString()</td>
+                    <td>@intervention.ComplaintId</td>
+                    <td>@intervention.Complaint.Client.Name</td>
+                    <td>@intervention.Complaint.Article.Name</td>
+                    <td>
+                        <a href="@Url.Action("Edit", new { id = intervention.Id })" class="btn btn-sm btn-primary">Edit</a>
+                        <a href="@Url.Action("Delete", new { id = intervention.Id })" class="btn btn-sm btn-danger">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

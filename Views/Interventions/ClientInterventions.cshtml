@@ -1,0 +1,92 @@
+@model List<ServiceApresVenteApp.Models.Intervention>
+@{
+    ViewData["Title"] = "My Interventions";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container">
+    <h2>My Interventions</h2>
+    
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">
+            You don't have any interventions yet. If you've submitted a complaint, our technicians will schedule an intervention soon.
+        </div>
+    }
+    else
+    {
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Description</th>
+                    <th>Intervention Date</th>
+                    <th>Complaint</th>
+                    <th>Article</th>
+                    <th>Warranty Status</th>
+                    <th>Spare Parts</th>
+                    <th>Total Cost</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var intervention in Model)
+                {
+                    <tr>
+                        <td>@intervention.Id</td>
+                        <td>@intervention.Description</td>
+                        <td>@intervention.InterventionDate.ToShortDateString()</td>
+                        <td>@intervention.Complaint.Description</td>
+                        <td>@intervention.Complaint.Article.Name</td>
+                        <td>
+                            @if (intervention.IsFree)
+                            {
+                                <span class="badge bg-success">Under Warranty</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger">Out of Warranty</span>
+                            }
+                        </td>
+                        <td>
+                            @if (intervention.SpareParts.Any())
+                            {
+                                <ul>
+                                    @foreach (var part in intervention.SpareParts)
+                                    {
+                                        <li>
+                                            @part.Name 
+                                            @if (intervention.IsFree)
+                                            {
+                                                <span class="text-success">(Covered by warranty)</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-danger">(@part.Price.ToString("C"))</span>
+                                            }
+                                        </li>
+                                    }
+                                </ul>
+                            }
+                            else
+                            {
+                                <span>No spare parts used</span>
+                            }
+                        </td>
+                        <td>
+                            @if (intervention.IsFree)
+                            {
+                                <span class="text-success">Free (Covered by warranty)</span>
+                            }
+                            else
+                            {
+                                <span class="text-danger">@intervention.TotalCost.ToString("C")</span>
+                                <small class="d-block">Labor: @intervention.LaborCost.ToString("C")</small>
+                                <small class="d-block">Parts: @intervention.SpareParts.Sum(p => p.Price).ToString("C")</small>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
+

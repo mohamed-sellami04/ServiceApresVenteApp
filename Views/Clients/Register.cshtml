@@ -1,0 +1,38 @@
+﻿@model ServiceApresVenteApp.Models.Client
+@{
+    ViewData["Title"] = "Register";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container">
+    <h2>Register</h2>
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <div class="alert alert-danger">
+            <ul>
+                @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    <li>@error.ErrorMessage</li>
+                }
+            </ul>
+        </div>
+    }
+    <form asp-action="Register" method="post">
+        <div class="mb-3">
+            <label asp-for="Name" class="form-label">Name</label>
+            <input asp-for="Name" name="Name" class="form-control" value="@Model?.Name" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Email" class="form-label">Email</label>
+            <input asp-for="Email" name="Email" class="form-control" value="@Model?.Email" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Password" class="form-label">Password</label>
+            <input asp-for="Password" name="Password" type="password" class="form-control" value="@Model?.Password" />
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+        <input asp-for="Role" type="hidden" name="Role" value="Client" />
+        <button type="submit" class="btn btn-primary">Register</button>
+    </form>
+</div>

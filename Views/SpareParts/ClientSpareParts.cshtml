@@ -1,0 +1,65 @@
+@model List<ServiceApresVenteApp.Models.SparePart>
+@{
+    ViewData["Title"] = "Spare Parts Used";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container">
+    <h2>Spare Parts Used in Your Interventions</h2>
+    
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">
+            No spare parts have been used in your interventions yet.
+        </div>
+    }
+    else
+    {
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Price</th>
+                    <th>Intervention</th>
+                    <th>Intervention Date</th>
+                    <th>Article</th>
+                    <th>Warranty Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var sparePart in Model)
+                {
+                    <tr>
+                        <td>@sparePart.Name</td>
+                        <td>@sparePart.Description</td>
+                        <td>
+                            @if (sparePart.Intervention?.IsFree == true)
+                            {
+                                <span class="text-success">Covered by warranty (Free)</span>
+                            }
+                            else
+                            {
+                                <span class="text-danger">@sparePart.Price.ToString("C")</span>
+                            }
+                        </td>
+                        <td>@sparePart.Intervention?.Description</td>
+                        <td>@sparePart.Intervention?.InterventionDate.ToShortDateString()</td>
+                        <td>@sparePart.Intervention?.Complaint?.Article?.Name</td>
+                        <td>
+                            @if (sparePart.Intervention?.IsFree == true)
+                            {
+                                <span class="badge bg-success">Under Warranty</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger">Out of Warranty</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
+
+

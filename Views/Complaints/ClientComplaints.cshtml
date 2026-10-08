@@ -1,0 +1,71 @@
+@model List<ServiceApresVenteApp.Models.Complaint>
+@{
+    ViewData["Title"] = "My Complaints";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container">
+    <h2>My Complaints</h2>
+    
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+    
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">
+            You haven't submitted any complaints yet. 
+            <a href="@Url.Action("Create", "Complaints")" class="alert-link">Create a new complaint</a>
+        </div>
+    }
+    else
+    {
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Description</th>
+                    <th>Article</th>
+                    <th>Submission Date</th>
+                    <th>Warranty Status</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var complaint in Model)
+                {
+                    <tr>
+                        <td>@complaint.Id</td>
+                        <td>@complaint.Description</td>
+                        <td>@complaint.Article.Name</td>
+                        <td>@complaint.SubmissionDate.ToShortDateString()</td>
+                        <td>
+                            @if (complaint.Article.IsUnderWarranty())
+                            {
+                                <span class="badge bg-success">Under Warranty</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger">Out of Warranty</span>
+                            }
+                        </td>
+                        <td>
+                            @if (complaint.Interventions != null && complaint.Interventions.Any())
+                            {
+                                <span class="badge bg-success">Intervention Scheduled</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-warning text-dark">Pending</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        
+        <a href="@Url.Action("Create", "Complaints")" class="btn btn-primary">Create New Complaint</a>
+    }
+</div>
